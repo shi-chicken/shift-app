@@ -58,7 +58,8 @@ if st.session_state.is_admin:
         "⑤ カレンダー表示",
         "⑥ 日別人数カウント",
         "⑦ 月間勤務時間集計",
-        "⑧ 時間帯別人数集計"
+        "⑧ 時間帯別人数集計",
+        "⑨ シフトデータ初期化"
     ])
 
     # -------------------------
@@ -282,6 +283,27 @@ if st.session_state.is_admin:
             count_df.columns = ["日付", "人数"]
 
             st.dataframe(count_df, use_container_width=True)
+            
+    # -------------------------
+    # ⑨ シフト初期化
+    # -------------------------
+    with tabs[8]:
+        st.subheader("⑨ シフトデータの初期化")
+
+        st.warning("⚠️ この操作はすべてのシフトデータを削除し、空のCSVファイルを再作成します。")
+
+        if st.button("⚠️ シフトデータを初期化する"):
+            try:
+                import os
+                if os.path.exists("shift.csv"):
+                    os.remove("shift.csv")
+                # 空のCSVを再作成
+                empty_df = pd.DataFrame(columns=["name", "date", "start", "end", "memo"])
+                empty_df.to_csv("shift.csv", index=False)
+                st.success("シフトデータを初期化しました！")
+            except Exception as e:
+                st.error(f"初期化中にエラーが発生しました: {e}")
+
 
     # ★ 管理者画面はここで終了
     st.stop()
