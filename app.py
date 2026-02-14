@@ -309,7 +309,6 @@ if st.session_state.is_admin:
                 empty_df = pd.DataFrame(columns=["name", "date", "start", "end", "memo"])
                 empty_df.to_csv("shift.csv", index=False)
                 st.success("シフトデータを初期化しました！")
-                st.rerun()
             except Exception as e:
                 st.error(f"初期化中にエラーが発生しました: {e}")
 
