@@ -191,7 +191,9 @@ if st.session_state.is_admin:
             st.info("まだシフトデータがありません")
             df = None
 
-        if df is not None:
+        if df is not None and len(df) > 0:
+            df = df.dropna(subset=["name", "date", "start", "end"])  # 不正データ除外
+
             unique_names = df["name"].unique()
             colors = [
                 "#ff9999", "#99ccff", "#99ff99", "#ffcc99",
@@ -201,20 +203,32 @@ if st.session_state.is_admin:
 
             events_admin = []
             for _, row in df.iterrows():
-                events_admin.append({
-                    "title": row["name"],
-                    "start": f"{row['date']}T{row['start']}",
-                    "end": f"{row['date']}T{row['end']}",
-                    "color": color_map[row["name"]]
-                })
+                try:
+                    events_admin.append({
+                        "title": row["name"],
+                        "start": f"{row['date']}T{row['start']}:00",
+                        "end": f"{row['date']}T{row['end']}:00",
+                        "color": color_map[row["name"]]
+                    })
+                except:
+                    continue  # 不正な行はスキップ
 
             cal_settings_admin = {
                 "initialView": "dayGridMonth",
                 "height": 600,
                 "expandRows": True,
+                "allDaySlot": False,
+                "eventTimeFormat": {
+                    "hour": "2-digit",
+                    "minute": "2-digit",
+                    "hour12": False
+                },
+                "displayEventTime": True
             }
 
             calendar(events=events_admin, options=cal_settings_admin)
+        else:
+            st.info("表示できるシフトデータがありません")
 
     # -------------------------
     # ⑥ 日別人数カウント
