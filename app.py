@@ -205,7 +205,7 @@ if st.session_state.is_admin:
             for _, row in df.iterrows():
                 try:
                     events_admin.append({
-                        "title": f"{row['start']}〜{row['end']} {row['name']}",
+                        "title": f"{row['start']}-{row['end']} {row['name']}",
                         "start": f"{row['date']}T{row['start']}:00",
                         "end": f"{row['date']}T{row['end']}:00",
                         "color": color_map[row["name"]]
