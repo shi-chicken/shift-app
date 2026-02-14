@@ -59,7 +59,8 @@ if st.session_state.is_admin:
         "⑥ 日別人数カウント",
         "⑦ 月間勤務時間集計",
         "⑧ 時間帯別人数集計",
-        "⑨ シフトデータ初期化"
+        "⑨ シフトデータ初期化",
+        "⑩ 設定"
     ])
 
     # -------------------------
@@ -330,6 +331,29 @@ if st.session_state.is_admin:
                 st.rerun()
             except Exception as e:
                 st.error(f"初期化中にエラーが発生しました: {e}")
+
+    # -------------------------
+    # ⑩ 設定
+    # -------------------------
+    with tabs[9]:
+        st.subheader("⑩ アプリ設定")
+
+        st.markdown("### 💰 時給・扶養ライン設定")
+
+        # セッションに保存するための初期化
+        if "hourly_wage" not in st.session_state:
+            st.session_state.hourly_wage = 1200  # 初期値
+        if "fuyou_limit" not in st.session_state:
+            st.session_state.fuyou_limit = 1300000  # 初期値（年収）
+
+        # 入力フォーム
+        wage = st.number_input("時給（円）", value=st.session_state.hourly_wage, step=10)
+        limit = st.number_input("扶養ライン（年収）", value=st.session_state.fuyou_limit, step=10000)
+
+        if st.button("設定を保存"):
+            st.session_state.hourly_wage = wage
+            st.session_state.fuyou_limit = limit
+            st.success("設定を保存しました！")
 
     # ★ 管理者画面はここで終了
     st.stop()
