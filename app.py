@@ -300,18 +300,22 @@ if st.session_state.is_admin:
 
         st.warning("⚠️ この操作はすべてのシフトデータを削除し、空のCSVファイルを再作成します。")
 
+        # 初期化完了メッセージの表示
+        if st.session_state.get("init_done", False):
+            st.success("シフトデータを初期化しました！")
+            st.session_state.init_done = False  # 一度表示したらリセット
+
         if st.button("⚠️ シフトデータを初期化する"):
             try:
                 import os
                 if os.path.exists("shift.csv"):
                     os.remove("shift.csv")
-                # 空のCSVを再作成
                 empty_df = pd.DataFrame(columns=["name", "date", "start", "end", "memo"])
                 empty_df.to_csv("shift.csv", index=False)
-                st.success("シフトデータを初期化しました！")
+                st.session_state.init_done = True  # フラグを立てる
+                st.rerun()
             except Exception as e:
                 st.error(f"初期化中にエラーが発生しました: {e}")
-
 
     # ★ 管理者画面はここで終了
     st.stop()
