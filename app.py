@@ -105,7 +105,7 @@ if st.session_state.is_admin:
             st.info("まだシフトデータがありません")
             df = None
 
-        if df is not None:
+        if df is not None and len(df) > 0:
             row_index = st.number_input("行番号（0〜）", min_value=0, max_value=len(df)-1, step=1)
             target = df.iloc[row_index]
 
@@ -127,6 +127,9 @@ if st.session_state.is_admin:
                 ]
                 df.to_csv("shift.csv", index=False)
                 st.success("編集内容を保存しました！")
+        else:
+            st.info("編集できるシフトデータがありません")
+
 
     # -------------------------
     # ③ 削除
@@ -140,7 +143,7 @@ if st.session_state.is_admin:
             st.info("まだシフトデータがありません")
             df = None
 
-        if df is not None:
+        if df is not None and len(df) > 0:
             st.dataframe(df, use_container_width=True)
 
             del_index = st.number_input("削除する行番号（0〜）", min_value=0, max_value=len(df)-1, step=1)
@@ -149,6 +152,8 @@ if st.session_state.is_admin:
                 df = df.drop(del_index).reset_index(drop=True)
                 df.to_csv("shift.csv", index=False)
                 st.success("削除しました！")
+        else:
+            st.info("削除できるシフトデータがありません")
 
     # -------------------------
     # ④ CSV ダウンロード
