@@ -223,7 +223,7 @@ if st.session_state.is_admin:
                     "minute": "2-digit",
                     "hour12": False
                 },
-                "displayEventTime": True
+                "displayEventTime": False
             }
 
             calendar(events=events_admin, options=cal_settings_admin)
