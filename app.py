@@ -259,7 +259,7 @@ if st.session_state.is_admin:
             st.dataframe(summary, use_container_width=True)
 
     # -------------------------
-    # ⑧ 時間帯別人数集計
+    # ⑧ 時間帯別人数集計（修正済み）
     # -------------------------
     with tabs[7]:
         st.subheader("⑧ 時間帯別人数集計（例：18〜21時）")
@@ -270,7 +270,7 @@ if st.session_state.is_admin:
             st.info("まだシフトデータがありません")
             df = None
 
-        if df is not None:
+        if df is not None and len(df) > 0:
             start_range = st.time_input("集計開始時間", time(18, 0))
             end_range = st.time_input("集計終了時間", time(21, 0))
 
@@ -288,6 +288,9 @@ if st.session_state.is_admin:
             count_df.columns = ["日付", "人数"]
 
             st.dataframe(count_df, use_container_width=True)
+        else:
+            st.info("集計できるシフトデータがありません")
+
             
     # -------------------------
     # ⑨ シフト初期化
